@@ -52,81 +52,81 @@ from cs231n.classifiers import KNearestNeighbor
 # Remember that training a kNN classifier is a noop: 
 # the Classifier simply remembers the data and does no further processing 
 classifier = KNearestNeighbor()
-classifier.train(X_train, y_train)
+#classifier.train(X_train, y_train)
 
-# Open cs231n/classifiers/k_nearest_neighbor.py and implement
-# compute_distances_two_loops.
+## Open cs231n/classifiers/k_nearest_neighbor.py and implement
+## compute_distances_two_loops.
 
-# Test your implementation:
-dists = classifier.compute_distances_two_loops(X_test)
-print dists.shape
+## Test your implementation:
+#dists = classifier.compute_distances_no_loops(X_test)
+#print dists.shape
 
-# We can visualize the distance matrix: each row is a single test example and
-# its distances to training examples
-plt.imshow(dists, interpolation='none')
-plt.show()
-
-
-# Now implement the function predict_labels and run the code below:
-# We use k = 1 (which is Nearest Neighbor).
-y_test_pred = classifier.predict_labels(dists, k=5)
-
-# Compute and print the fraction of correctly predicted examples
-num_correct = np.sum(y_test_pred == y_test)
-accuracy = float(num_correct) / num_test
-print 'Got %d / %d correct => accuracy: %f' % (num_correct, num_test, accuracy)
-
-# Now lets speed up distance matrix computation by using partial vectorization
-# with one loop. Implement the function compute_distances_one_loop and run the
-# code below:
-dists_one = classifier.compute_distances_one_loop(X_test)
-
-# To ensure that our vectorized implementation is correct, we make sure that it
-# agrees with the naive implementation. There are many ways to decide whether
-# two matrices are similar; one of the simplest is the Frobenius norm. In case
-# you haven't seen it before, the Frobenius norm of two matrices is the square
-# root of the squared sum of differences of all elements; in other words, reshape
-# the matrices into vectors and compute the Euclidean distance between them.
-difference = np.linalg.norm(dists - dists_one, ord='fro')
-print 'Difference was: %f' % (difference, )
-if difference < 0.001:
-    print 'Good! The distance matrices are the same'
-else:
-    print 'Uh-oh! The distance matrices are different'
+## We can visualize the distance matrix: each row is a single test example and
+## its distances to training examples
+#plt.imshow(dists, interpolation='none')
+#plt.show()
 
 
-# Now implement the fully vectorized version inside compute_distances_no_loops
-# and run the code
-dists_two = classifier.compute_distances_no_loops(X_test)
+## Now implement the function predict_labels and run the code below:
+## We use k = 1 (which is Nearest Neighbor).
+#y_test_pred = classifier.predict_labels(dists, k=5)
 
-# check that the distance matrix agrees with the one we computed before:
-difference = np.linalg.norm(dists - dists_two, ord='fro')
-print 'Difference was: %f' % (difference, )
-if difference < 0.001:
-    print 'Good! The distance matrices are the same'
-else:
-    print 'Uh-oh! The distance matrices are different'
+## Compute and print the fraction of correctly predicted examples
+#num_correct = np.sum(y_test_pred == y_test)
+#accuracy = float(num_correct) / num_test
+#print 'Got %d / %d correct => accuracy: %f' % (num_correct, num_test, accuracy)
+
+## Now lets speed up distance matrix computation by using partial vectorization
+## with one loop. Implement the function compute_distances_one_loop and run the
+## code below:
+#dists_one = classifier.compute_distances_one_loop(X_test)
+
+## To ensure that our vectorized implementation is correct, we make sure that it
+## agrees with the naive implementation. There are many ways to decide whether
+## two matrices are similar; one of the simplest is the Frobenius norm. In case
+## you haven't seen it before, the Frobenius norm of two matrices is the square
+## root of the squared sum of differences of all elements; in other words, reshape
+## the matrices into vectors and compute the Euclidean distance between them.
+#difference = np.linalg.norm(dists - dists_one, ord='fro')
+#print 'Difference was: %f' % (difference, )
+#if difference < 0.001:
+    #print 'Good! The distance matrices are the same'
+#else:
+    #print 'Uh-oh! The distance matrices are different'
+
+
+## Now implement the fully vectorized version inside compute_distances_no_loops
+## and run the code
+#dists_two = classifier.compute_distances_no_loops(X_test)
+
+## check that the distance matrix agrees with the one we computed before:
+#difference = np.linalg.norm(dists - dists_two, ord='fro')
+#print 'Difference was: %f' % (difference, )
+#if difference < 0.001:
+    #print 'Good! The distance matrices are the same'
+#else:
+    #print 'Uh-oh! The distance matrices are different'
     
 
-# Let's compare how fast the implementations are
-def time_function(f, *args):
-    """
-    Call a function f with args and return the time (in seconds) that it took to execute.
-    """
-    import time
-    tic = time.time()
-    f(*args)
-    toc = time.time()
-    return toc - tic
+## Let's compare how fast the implementations are
+#def time_function(f, *args):
+    #"""
+    #Call a function f with args and return the time (in seconds) that it took to execute.
+    #"""
+    #import time
+    #tic = time.time()
+    #f(*args)
+    #toc = time.time()
+    #return toc - tic
 
-two_loop_time = time_function(classifier.compute_distances_two_loops, X_test)
-print 'Two loop version took %f seconds' % two_loop_time
+#two_loop_time = time_function(classifier.compute_distances_two_loops, X_test)
+#print 'Two loop version took %f seconds' % two_loop_time
 
-one_loop_time = time_function(classifier.compute_distances_one_loop, X_test)
-print 'One loop version took %f seconds' % one_loop_time
+#one_loop_time = time_function(classifier.compute_distances_one_loop, X_test)
+#print 'One loop version took %f seconds' % one_loop_time
 
-no_loop_time = time_function(classifier.compute_distances_no_loops, X_test)
-print 'No loop version took %f seconds' % no_loop_time
+#no_loop_time = time_function(classifier.compute_distances_no_loops, X_test)
+#print 'No loop version took %f seconds' % no_loop_time
 
 # you should see significantly faster performance with the fully vectorized implementation
 
@@ -142,7 +142,8 @@ y_train_folds = []
 # y_train_folds[i] is the label vector for the points in X_train_folds[i].     #
 # Hint: Look up the numpy array_split function.                                #
 ################################################################################
-pass
+X_train_folds = np.split(X_train, num_folds)
+y_train_folds = np.split(y_train, num_folds)
 ################################################################################
 #                                 END OF YOUR CODE                             #
 ################################################################################
@@ -162,7 +163,25 @@ k_to_accuracies = {}
 # last fold as a validation set. Store the accuracies for all fold and all     #
 # values of k in the k_to_accuracies dictionary.                               #
 ################################################################################
-pass
+for k in k_choices:
+    accuracies = []
+    for i in range(num_folds):
+        X_train_this = list(X_train_folds)
+        del X_train_this[i]        
+        y_train_this = list(y_train_folds)
+        del y_train_this[i]        
+        x = np.row_stack(X_train_this)
+        y = np.concatenate(y_train_this)
+        print('after row stack')
+        print x.shape
+        print y.shape
+        classifier.train(x, y)
+        dists = classifier.compute_distances_no_loops(X_train_folds[i])
+        y_test_pred = classifier.predict_labels(dists, k)
+        num_correct = np.sum(y_test_pred == y_train_folds[i])
+        accuracy = float(num_correct) / num_test
+        accuracies.append(accuracy)
+    k_to_accuracies[k] = accuracies
 ################################################################################
 #                                 END OF YOUR CODE                             #
 ################################################################################
@@ -171,3 +190,31 @@ pass
 for k in sorted(k_to_accuracies):
     for accuracy in k_to_accuracies[k]:
         print 'k = %d, accuracy = %f' % (k, accuracy)
+
+# plot the raw observations
+for k in k_choices:
+    accuracies = k_to_accuracies[k]
+    plt.scatter([k] * len(accuracies), accuracies)
+
+# plot the trend line with error bars that correspond to standard deviation
+accuracies_mean = np.array([np.mean(v) for k,v in sorted(k_to_accuracies.items())])
+accuracies_std = np.array([np.std(v) for k,v in sorted(k_to_accuracies.items())])
+plt.errorbar(k_choices, accuracies_mean, yerr=accuracies_std)
+plt.title('Cross-validation on k')
+plt.xlabel('k')
+plt.ylabel('Cross-validation accuracy')
+plt.show()        
+
+# Based on the cross-validation results above, choose the best value for k,   
+# retrain the classifier using all the training data, and test it on the test
+# data. You should be able to get above 28% accuracy on the test data.
+best_k = 10
+
+classifier = KNearestNeighbor()
+classifier.train(X_train, y_train)
+y_test_pred = classifier.predict(X_test, k=best_k)
+
+# Compute and display the accuracy
+num_correct = np.sum(y_test_pred == y_test)
+accuracy = float(num_correct) / num_test
+print 'Got %d / %d correct => accuracy: %f' % (num_correct, num_test, accuracy)

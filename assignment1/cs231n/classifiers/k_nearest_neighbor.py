@@ -126,14 +126,23 @@ class KNearestNeighbor(object):
     # HINT: Try to formulate the l2 distance using matrix multiplication    #
     #       and two broadcast sums.                                         #
     #########################################################################
-    # X (num_test, D)
-    # self.X_train (num_train, D)
-    # (num_test, 1, D) - (1, num_train, D) ==> (num_test, num_train, D)
-    X_3d = np.expand_dims(X, axis=1)
-    X_train_3d = np.expand_dims(self.X_train, axis=0)
-    diff = X_3d - X_train_3d
-    diff.shape
-    dists = np.sqrt(np.sum(diff**2, axis=2))
+    ## X (num_test, D)
+    ## self.X_train (num_train, D)
+    ## (num_test, 1, D) - (1, num_train, D) ==> (num_test, num_train, D)
+    #X_3d = np.expand_dims(X, axis=1)
+    #X_train_3d = np.expand_dims(self.X_train, axis=0)
+    #print('after expanding {0} {1}'.format(X_3d.shape, X_train_3d.shape))        
+    #dists = np.sqrt(np.sum((X_3d - X_train_3d)**2, axis=2))
+    # the above method results in a memory error
+    
+    # (ai-bj)**2 = ai**2 + bj**2 -2aibj
+    # sum_D (ai-bj)**2 = sum_D ai**2 + sum_D bj**2 - sum_D 2aibj
+    first_term = np.sum(X**2, axis=1)
+    second_term = np.sum(self.X_train**2, axis=1)
+    third_term = X.dot(self.X_train.T)
+    first_term = np.expand_dims(first_term, axis=1)
+    second_term = np.expand_dims(second_term, axis=0)
+    dists = np.sqrt(first_term + second_term - 2 * third_term)
     #########################################################################
     #                         END OF YOUR CODE                              #
     #########################################################################
